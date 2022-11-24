@@ -1,0 +1,23 @@
+version: '3.7' # Docker Engine release: 18.06.0+
+
+services:
+  mongodb:
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_DATABASE=jumbo
+    ports:
+      - 27017:27017
+
+  mongo-init:
+    build: ./scripts
+    restart: on-failure
+    depends_on:
+      - mongodb
+
+  backend-app:
+    build: .
+    restart: on-failure
+    ports:
+      - 8085:8085
+    depends_on:
+      - mongodb
